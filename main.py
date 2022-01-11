@@ -4,6 +4,7 @@ import time
 
 from selenium import webdriver
 from loguru import logger
+from tqdm import tqdm
 
 import selenium.common.exceptions
 from selenium.webdriver.common.by import By
@@ -11,9 +12,10 @@ from selenium.webdriver.common.by import By
 logger.add('运行日志.txt', level="DEBUG", rotation="1 MB", retention='1 days', encoding="utf-8")
 
 
-def sleep(secs: int):
-    logger.debug(f"将会等待{secs}秒")
-    time.sleep(secs)
+def sleep(secs: int, info: str = ""):
+    secs = int(secs)
+    for _ in tqdm(list(range(secs)), desc=f"{f'[{info}]-' if info else ''}等待{secs}秒"):
+        time.sleep(1)
 
 
 @logger.catch
@@ -23,10 +25,12 @@ class MyWebDriver:
             self.driver = webdriver.Edge()
         except selenium.common.exceptions.SessionNotCreatedException:
             raise Exception(f"错误！您的浏览器驱动不匹配，请重新下载后将驱动器与程序放在同一文件夹下。\n"
-                            f"请访问该链接来下载与您浏览器版本对应的驱动：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/")
+                            f"请访问该链接来下载与您浏览器版本对应的驱动："
+                            f"https://www.selenium.dev/zh-cn/documentation/webdriver/getting_started/install_drivers/")
         except selenium.common.exceptions.WebDriverException:
             raise Exception(f"错误！没有找到可用的浏览器驱动！\n"
-                            f"请访问该链接来下载与您浏览器版本对应的驱动：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/")
+                            f"请访问该链接来下载与您浏览器版本对应的驱动："
+                            f"https://www.selenium.dev/zh-cn/documentation/webdriver/getting_started/install_drivers/")
         self.driver.maximize_window()
 
     def get(self, target_url: str):
@@ -57,7 +61,6 @@ class MyWebDriver:
         for raw_chapter in raw_chapters:
             state = raw_chapter.find_element(by=By.CSS_SELECTOR, value=".state")
             if state.text and "/" in state.text:
-                logger.debug(f"该章节进度：{state.text}")
                 finished, total = tuple(map(int, state.text.split('/', 2)))
                 if finished < total:
                     filtered_chapters_list.append(raw_chapter)
@@ -149,7 +152,11 @@ class Handler:
         sleep(1)
         self.web.driver.switch_to.alert.accept()
         sleep(1)
+        logger.info(f"完成课程：{self.web.driver.title}")
         self.start()
+
+    def minimize_window(self):
+        self.web.driver.minimize_window()
 
 
 if __name__ == '__main__':
@@ -159,7 +166,7 @@ if __name__ == '__main__':
         handler.start()
     except KeyboardInterrupt:
         logger.info("结束。将会在30秒后自动关闭页面")
-        handler.web.driver.minimize_window()
+        handler.minimize_window()
         sleep(30)
     except Exception as e:
         print(f"{e}\n\n出错了，详情请查看运行日志")
