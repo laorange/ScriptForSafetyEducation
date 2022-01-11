@@ -1,107 +1,169 @@
 __Author__ = ", ".join(["GitHub@laorange", "bilibili@辣橙yzc"])
 
-from selenium import webdriver
 import time
-from traceback import print_exc
-from pathlib import Path
 
-BASE_DIR = Path(__file__).parent
+from selenium import webdriver
+from loguru import logger
 
-# 创建浏览器对象
-driver = webdriver.Edge(str(BASE_DIR / "msedgedriver.exe"))
-# 窗口最大化显示
-driver.maximize_window()
+import selenium.common.exceptions
+from selenium.webdriver.common.by import By
 
-url = r"https://weiban.mycourse.cn/index.html#/course?projectType=pre"
-driver.get(url)
-
-start_time = time.perf_counter()
-login = False
-course_p_percent = 1
-course_progress_percent = 0
+logger.add('运行日志.txt', level="DEBUG", rotation="1 MB", retention='1 days', encoding="utf-8")
 
 
-def exe(if_debug: bool = False):
-    global login, start_time, course_p_percent, course_progress_percent
+def sleep(secs: int):
+    logger.debug(f"将会等待{secs}秒")
+    time.sleep(secs)
 
-    css_selector_chapter = ".folder-list > .folder-item"
-    chapters = []
 
-    while not chapters:
-        if not login:
-            time.sleep(10)  # 用于登录
-        driver.implicitly_wait(5)
-        if not str(driver.current_url).endswith("login"):
-            driver.get(url)
-        driver.implicitly_wait(5)
-        chapters = driver.find_elements_by_css_selector(css_selector_chapter)
+@logger.catch
+class MyWebDriver:
+    def __init__(self):
+        try:
+            self.driver = webdriver.Edge()
+        except selenium.common.exceptions.SessionNotCreatedException:
+            raise Exception(f"错误！您的浏览器驱动不匹配，请重新下载后将驱动器与程序放在同一文件夹下。\n"
+                            f"请访问该链接来下载与您浏览器版本对应的驱动：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/")
+        except selenium.common.exceptions.WebDriverException:
+            raise Exception(f"错误！没有找到可用的浏览器驱动！\n"
+                            f"请访问该链接来下载与您浏览器版本对应的驱动：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/")
+        self.driver.maximize_window()
 
-    if not login:
-        start_time = time.perf_counter()
-        login = True
-        progress_percent_pre = driver.find_element_by_css_selector(".progress-percent").text
-        progress_percent = float(str(progress_percent_pre)[:-1])
-        course_p_percent = progress_percent / 80 if progress_percent < 80 else 1
-        if course_p_percent == 1:
-            email_c = "经检查，您的课程已全部完成，请在公众号“平安航大”的“安全微伴”中查看。"
+    def get(self, target_url: str):
+        self.driver.get(target_url)
+        self.driver.implicitly_wait(5)
+
+    def query_selector(self, css_selector: str):
+        try:
+            return self.driver.find_element(by=By.CSS_SELECTOR, value=css_selector)
+        except selenium.common.exceptions.NoSuchElementException:
+            return None
+
+    def query_selector_all(self, css_selector: str):
+        return self.driver.find_elements(by=By.CSS_SELECTOR, value=css_selector)
+
+    def get_iframe_body(self):
+        inner_frame = self.query_selector("iframe.page-iframe")
+        self.driver.switch_to.frame(inner_frame)
+        inner_frame_body = self.query_selector("body")
+        return inner_frame_body
+
+    def filter_chapter(self):
+        self.driver.implicitly_wait(5)
+        sleep(3)
+        raw_chapters = self.query_selector_all("li.folder-item")
+
+        filtered_chapters_list = []
+        for raw_chapter in raw_chapters:
+            state = raw_chapter.find_element(by=By.CSS_SELECTOR, value=".state")
+            if state.text and "/" in state.text:
+                logger.debug(f"该章节进度：{state.text}")
+                finished, total = tuple(map(int, state.text.split('/', 2)))
+                if finished < total:
+                    filtered_chapters_list.append(raw_chapter)
+        return filtered_chapters_list
+
+
+@logger.catch
+class Handler:
+    def __init__(self, target_url: str):
+        self.target_url = target_url
+        self.info()
+        self.web = MyWebDriver()
+        self.if_login = False
+
+    def info(self):
+        answer1 = input(f"即将访问的页面是：{self.target_url}，请问这是否为您想要刷的课？\n若是，请直接回车；若不是，请输入no：")
+        if answer1 in ["n", "N", "no", "No"]:
+            self.target_url = input("请注意，本程序是为安全教育（http://weiban.mycourse.cn）而设计的，并不适用于别的网站。\n"
+                                    "请输入想要刷课的目标网址(应以 http://weiban.mycourse.cn/#/course?projectType=... 开头)：")
+        print("\n使用提示：\n"
+              "1.在接下来，会去调用浏览器驱动(webdriver)，如果驱动失败请下载与自己的浏览器匹配的驱动器，详情可查看我在b站发的视频(https://space.bilibili.com/384113181)\n"
+              "2.将会跳转到安全教育的登录页面，请扫码登录后 回到这个黑框敲回车\n"
+              "3.程序能跑，但不耐折腾，请勿在程序运行时，手动地和驱动器抢夺浏览器的控制权，否则可能会出现未知的bug\n"
+              "4.如果遇到了问题，可以查看当前文件夹下的“运行日志”，也可以在视频的评论区留言讨论~\n"
+              "5.如果想要终止程序，可以在这个黑框里按ctrl+c\n"
+              "6.一键三连后(认真脸)，就可以开始啦\n")
+        input("请在阅读上方的使用提示后(尤其是第二条)，敲击回车:")
+
+    def start(self):
+        self.web.get(self.target_url)
+        self.ensure_login()
+        self.chapter_list_page_func()
+
+    def update_login_status(self):
+        if r"/course" in self.web.driver.current_url:
+            self.if_login = True
+
+    def ensure_login(self):
+        while not self.if_login:
+            input("\n现在请您先扫码登录，确认已经了登录后，请敲回车：")
+            self.web.get(self.target_url)
+            self.update_login_status()
+
+    def chapter_list_page_func(self):
+        def next_step():
+            self.web.driver.implicitly_wait(5)
+            sleep(1)
+            self.course_list_page_list()
+
+        logger.debug("进入主页面")  # 章节列表页，可以算是主页面
+        areas = self.web.query_selector("div.mint-tab-container-item:not([display=none])")
+        if not areas:
+            print("没检测到有效区域!")
+            return
+
+        parts = self.web.query_selector_all(".mint-navbar a")
+        if parts:
+            for part in parts:
+                part.click()  # 点击导航栏的按钮，进入到某个板块儿
+                if filtered_chapters := self.web.filter_chapter():
+                    filtered_chapters[0].find_element(by=By.CSS_SELECTOR, value=".btn").click()
+                    next_step()
+                    break
         else:
-            email_c = "已开始学习。经检查，您的当前进度为{}".format(progress_percent_pre)
-        print(email_c)
+            if filtered_chapters := self.web.filter_chapter():
+                filtered_chapters[0].find_element(by=By.CSS_SELECTOR, value=".btn").click()
+                next_step()
+        raise KeyboardInterrupt
 
-    finished_chapters_amount = 0
-    for chapter in chapters:  # 遍历所有章节
-        state = str(chapter.find_element_by_css_selector(".state").text)
-        assert state
-        finished, total = tuple(state.split('/', 2))
+    def course_list_page_list(self):
+        logger.debug("进入章节页面")
+        courses = self.web.query_selector_all(".course")
+        for course in courses:
+            if course.text and not course.find_elements(by=By.CSS_SELECTOR, value="h3>i"):
+                course.click()
+                self.web.driver.implicitly_wait(5)
+                sleep(3)
+                self.course_page_list()
+                return
+        self.start()
 
-        if finished == total and not if_debug:
-            finished_chapters_amount += 1
-            continue  # 这一章节刷完了
-
-        # 进入到某个章节中
-        chapter.find_element_by_css_selector("div.folder-extra > a.btn").click()
-        driver.implicitly_wait(5)
-
-        # 章节 > 课程  获取列表最上面的那节课
-        css_selector_course = ".course-list > li:nth-child(1)"
-        course = driver.find_element_by_css_selector(css_selector_course)
-
-        if not if_debug:
-            if course.find_elements_by_css_selector("h3 > i"):  # 最上面的课已经处于完成状态了，则返回
-                return False
-
-        course.find_element_by_css_selector("h3").click()  # 进入该课程
-        driver.implicitly_wait(15)
-        time.sleep(6)
-
-        inner_frame = driver.find_element_by_css_selector("iframe.page-iframe")
-        driver.switch_to.frame(inner_frame)
-        time.sleep(5)
-        inner_frame_body = driver.find_element_by_css_selector("body")
-        driver.execute_script("finishWxCourse()", inner_frame_body)
-
-        time.sleep(1)
-        driver.switch_to.alert.accept()
-        time.sleep(1)
-        return False
-
-    if finished_chapters_amount == len(chapters):  # 所有章节都刷完时
-        durant = "共用时：{:.2f}秒".format(time.perf_counter() - start_time)
-        print(f'您的课程已全部完成。{durant}')
-        input("\n请敲击回车来结束程序：")
-        return True  # 课刷完了，程序终止
-    else:
-        return False
+    def course_page_list(self):
+        logger.debug("进入课程页面")
+        inner_frame = self.web.driver.find_element(by=By.CSS_SELECTOR, value="iframe")
+        self.web.driver.switch_to.frame(inner_frame)
+        sleep(10)
+        inner_frame_body = self.web.driver.find_element(by=By.CSS_SELECTOR, value="body")
+        self.web.driver.execute_script("finishWxCourse()", inner_frame_body)
+        sleep(1)
+        self.web.driver.switch_to.alert.accept()
+        sleep(1)
+        self.start()
 
 
 if __name__ == '__main__':
-    FINISHED = False
-    while not FINISHED:
-        try:
-            FINISHED = exe()
-        except KeyboardInterrupt:
-            break
-        except Exception as e:
-            print(e)
-            print_exc()
-            time.sleep(10)
+    handler = Handler(r"http://weiban.mycourse.cn/#/course?projectType=normal")
+
+    try:
+        handler.start()
+    except KeyboardInterrupt:
+        logger.info("结束。将会在30秒后自动关闭页面")
+        handler.web.driver.minimize_window()
+        sleep(30)
+    except Exception as e:
+        print(f"{e}\n\n出错了，详情请查看运行日志")
+        input("敲击回车 来终止程序:")
+    finally:
+        if hasattr(handler, "web") and hasattr(handler.web, "driver"):
+            handler.web.driver.close()
