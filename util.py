@@ -1,6 +1,7 @@
 __Author__ = ", ".join(["GitHub@laorange", "bilibili@辣橙yzc"])
 
 import time
+import traceback
 from random import randint
 
 from loguru import logger
@@ -9,7 +10,7 @@ import selenium.common.exceptions
 from selenium.webdriver.common.by import By
 from PySide6.QtCore import Signal, QObject
 
-logger.add('运行日志.txt', level="DEBUG", rotation="1 MB", retention='1 days', encoding="utf-8")
+logger.add('运行日志.txt', level="DEBUG", retention='3 days', encoding="utf-8")
 BROWSER_CHOICE = [
     {"name": "Edge", "driver": webdriver.Edge,
      "url": "https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/"},
@@ -72,6 +73,10 @@ class MyWebDriver:
             raise Exception(f"错误！您的浏览器驱动不匹配，请重新下载驱动器")
         except selenium.common.exceptions.WebDriverException:
             raise Exception(f"错误！没有找到可用的浏览器驱动！")
+        except:
+            logger.error(traceback.format_exc())
+            raise Exception(f"该浏览器驱动不可用！详情可在“开发”中选择“查看日志”")
+
         self.driver.maximize_window()
 
     def getDriver(self):

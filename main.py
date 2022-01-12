@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 from ui import Ui_MainWindow
 from util import MyWebDriver, Handler, logger, BROWSER_CHOICE, my_signal, PROJECT_TYPE_CHOICE
 
-__version__ = "3.0.0.1"
+__version__ = "beta3.0.0.2"
 
 
 class MainWindow(QMainWindow):
@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.setWindowTitle(f"安全教育刷课程序 v{__version__}")
+        self.setWindowTitle(f"安全教育刷课程序 {__version__}")
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint |
                             Qt.WindowCloseButtonHint | Qt.WindowStaysOnTopHint)
 
@@ -28,15 +28,28 @@ class MainWindow(QMainWindow):
         self.MAX_BIAS: int = 10
         self.driverPath: str = ""
 
+        if not sys.platform.startswith('win'):
+            QMessageBox.warning(self, "兼容性警告", "本程序在非Windows系统上使用可能会出现异常！")
+
         self.bind_slots_and_signals()
 
     def bind_slots_and_signals(self):
         self.ui.downloadDriverButton.clicked.connect(self.downloadDriverButtonFunction)
         self.ui.findLocalDriver.clicked.connect(self.findLocalDriverFunction)
-        self.ui.checkLog.clicked.connect(self.checkLogFunction)
         self.ui.testDriver.clicked.connect(self.testDriverFunction)
         self.ui.start.clicked.connect(self.startFunc)
         self.ui.projectType.currentIndexChanged.connect(self.changeProjectTypeFunction)
+
+        self.ui.checkLog.triggered.connect(self.checkLogFunction)
+        self.ui.whyNeedDriver.triggered.connect(lambda _: os.startfile("https://www.selenium.dev/zh-cn/documentation/webdriver/getting_started/"))
+        self.ui.how2DownloadDriver.triggered.connect(
+            lambda _: os.startfile("https://www.selenium.dev/zh-cn/documentation/webdriver/getting_started/install_drivers/"))
+        self.ui.bilibili_v1.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1UL411t7CR"))
+        self.ui.bilibili_v2.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1TL411c7mt"))
+        self.ui.bilibili_v3.triggered.connect(lambda _: os.startfile("https://space.bilibili.com/384113181"))
+        self.ui.github.triggered.connect(lambda _: os.startfile("https://github.com/laorange/ScriptForSafetyEducation"))
+        self.ui.gitee.triggered.connect(lambda _: os.startfile("https://gitee.com/laorange/ScriptForSafetyEducation"))
+        self.ui.how2GetVersionOfBrowser.triggered.connect(lambda _: os.startfile("https://jingyan.baidu.com/article/0964eca222def8c384f5361e.html"))
 
         my_signal.enable_start_button.connect(self.enable_start_button_function)
         my_signal.disable_start_button.connect(self.disable_download_button_function)
@@ -120,7 +133,6 @@ class MainWindow(QMainWindow):
         self.ui.TARGET_URL.setText(PROJECT_TYPE_CHOICE[self.ui.projectType.currentIndex()])
 
     def startFunc(self):
-        @logger.catch
         def task_func():
             handler = None
             try:
@@ -141,9 +153,10 @@ class MainWindow(QMainWindow):
             my_signal.set_total_progress_bar(0)
             my_signal.set_wait_progress_bar(0)
 
-        choice = QMessageBox.question(self, "使用须知", "1.该程序仅用于学习交流，请勿商用\n"
-                                                    "2.如果不着急，每节课的间隔时长可以设置在1分钟以上，尽量与正常看课接近，这样会很安全\n"
-                                                    "3.使用该程序导致的任何后果请由使用者自行承担\n\n是否同意：")
+        choice = QMessageBox.question(self, "使用须知",
+                                      "1.该程序仅用于学习交流，请勿商用\n"
+                                      "2.如果不着急，每节课的间隔时长可以设置在1分钟以上，尽量与正常看课时间接近，这样会非常安全\n"
+                                      "3.使用该程序导致的任何后果请由使用者自行承担\n\n是否同意：")
 
         if choice == QMessageBox.Yes and self.load_data():
             task = Thread(target=task_func)

@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>504</height>
+    <width>700</width>
+    <height>475</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>800</width>
+    <width>700</width>
     <height>0</height>
    </size>
   </property>
@@ -168,7 +168,7 @@
         <item row="1" column="1">
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>秒 (让每节课完成的时间有所差异，若为0则相同)</string>
+           <string>秒 (让每节课完成的时间有所差异; 若为0, 则相同)</string>
           </property>
          </widget>
         </item>
@@ -283,46 +283,13 @@
        </widget>
       </item>
       <item row="6" column="0">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>关于浏览器驱动：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="label_10">
-          <property name="text">
-           <string>请在浏览器访问：</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit_2">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>https://www.selenium.dev/zh-cn/documentation/webdriver/getting_started/install_drivers/</string>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="7" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>选择浏览器：</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
+      <item row="6" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QComboBox" name="BROWSER">
@@ -382,14 +349,14 @@
         </item>
        </layout>
       </item>
-      <item row="8" column="0">
+      <item row="7" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>加载浏览器驱动：</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
+      <item row="7" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
         <item>
          <widget class="QPushButton" name="findLocalDriver">
@@ -435,18 +402,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="checkLog">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>查看日志</string>
-        </property>
-       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="testDriver">
@@ -518,12 +473,111 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>700</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <widget class="QMenu" name="menu_B">
+     <property name="title">
+      <string>本程序在B站的视频</string>
+     </property>
+     <addaction name="bilibili_v1"/>
+     <addaction name="bilibili_v2"/>
+     <addaction name="bilibili_v3"/>
+    </widget>
+    <addaction name="how2GetVersionOfBrowser"/>
+    <addaction name="whyNeedDriver"/>
+    <addaction name="how2DownloadDriver"/>
+    <addaction name="separator"/>
+    <addaction name="menu_B"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>开发</string>
+    </property>
+    <widget class="QMenu" name="gitee">
+     <property name="title">
+      <string>查看程序源代码</string>
+     </property>
+     <addaction name="github"/>
+     <addaction name="actionGitee_2"/>
+    </widget>
+    <addaction name="checkLog"/>
+    <addaction name="gitee"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="whyNeedDriver">
+   <property name="text">
+    <string>为什么需要浏览器驱动</string>
+   </property>
+  </action>
+  <action name="how2DownloadDriver">
+   <property name="text">
+    <string>怎么安装浏览器驱动</string>
+   </property>
+  </action>
+  <action name="action_B">
+   <property name="text">
+    <string>本程序在B站的视频</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>查看程序源代码</string>
+   </property>
+  </action>
+  <action name="bilibili_v1">
+   <property name="text">
+    <string>v1-新生安全教育(2021.8.19)</string>
+   </property>
+  </action>
+  <action name="bilibili_v2">
+   <property name="text">
+    <string>v2-安全教育(2022.1.10)</string>
+   </property>
+  </action>
+  <action name="bilibili_v3">
+   <property name="text">
+    <string>v3-图形界面(2022.1.xx)</string>
+   </property>
+  </action>
+  <action name="actionGithub">
+   <property name="text">
+    <string>Github(可能会被墙)</string>
+   </property>
+  </action>
+  <action name="actionGitee">
+   <property name="text">
+    <string>Gitee</string>
+   </property>
+  </action>
+  <action name="checkLog">
+   <property name="text">
+    <string>查看日志</string>
+   </property>
+  </action>
+  <action name="github">
+   <property name="text">
+    <string>Github(可能会被墙)</string>
+   </property>
+  </action>
+  <action name="actionGitee_2">
+   <property name="text">
+    <string>Gitee</string>
+   </property>
+  </action>
+  <action name="how2GetVersionOfBrowser">
+   <property name="text">
+    <string>怎么查看浏览器版本号</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
