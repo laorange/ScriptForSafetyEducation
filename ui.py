@@ -357,7 +357,7 @@ class Ui_MainWindow(object):
         self.action_3.setText(QCoreApplication.translate("MainWindow", u"\u67e5\u770b\u7a0b\u5e8f\u6e90\u4ee3\u7801", None))
         self.bilibili_v1.setText(QCoreApplication.translate("MainWindow", u"v1-\u65b0\u751f\u5b89\u5168\u6559\u80b2(2021.8.19)", None))
         self.bilibili_v2.setText(QCoreApplication.translate("MainWindow", u"v2-\u5b89\u5168\u6559\u80b2(2022.1.10)", None))
-        self.bilibili_v3.setText(QCoreApplication.translate("MainWindow", u"v3-\u56fe\u5f62\u754c\u9762(2022.1.xx)", None))
+        self.bilibili_v3.setText(QCoreApplication.translate("MainWindow", u"v3-\u56fe\u5f62\u754c\u9762(2022.1.13)", None))
         self.actionGithub.setText(QCoreApplication.translate("MainWindow", u"Github(\u53ef\u80fd\u4f1a\u88ab\u5899)", None))
         self.actionGitee.setText(QCoreApplication.translate("MainWindow", u"Gitee", None))
         self.checkLog.setText(QCoreApplication.translate("MainWindow", u"\u67e5\u770b\u65e5\u5fd7", None))

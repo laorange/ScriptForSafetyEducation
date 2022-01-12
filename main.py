@@ -1,3 +1,6 @@
+__Author__ = "bilibili@辣橙yzc"
+__version__ = "v3.0.0"
+
 import os
 import sys
 import traceback
@@ -10,8 +13,6 @@ from PySide6.QtCore import Qt
 
 from ui import Ui_MainWindow
 from util import MyWebDriver, Handler, logger, BROWSER_CHOICE, my_signal, PROJECT_TYPE_CHOICE
-
-__version__ = "beta3.0.0.2"
 
 
 class MainWindow(QMainWindow):
@@ -46,7 +47,7 @@ class MainWindow(QMainWindow):
             lambda _: os.startfile("https://www.selenium.dev/zh-cn/documentation/webdriver/getting_started/install_drivers/"))
         self.ui.bilibili_v1.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1UL411t7CR"))
         self.ui.bilibili_v2.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1TL411c7mt"))
-        self.ui.bilibili_v3.triggered.connect(lambda _: os.startfile("https://space.bilibili.com/384113181"))
+        self.ui.bilibili_v3.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1Bu411278n"))
         self.ui.github.triggered.connect(lambda _: os.startfile("https://github.com/laorange/ScriptForSafetyEducation"))
         self.ui.gitee.triggered.connect(lambda _: os.startfile("https://gitee.com/laorange/ScriptForSafetyEducation"))
         self.ui.how2GetVersionOfBrowser.triggered.connect(lambda _: os.startfile("https://jingyan.baidu.com/article/0964eca222def8c384f5361e.html"))

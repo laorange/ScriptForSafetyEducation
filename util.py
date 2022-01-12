@@ -1,5 +1,3 @@
-__Author__ = ", ".join(["GitHub@laorange", "bilibili@辣橙yzc"])
-
 import time
 import traceback
 from random import randint

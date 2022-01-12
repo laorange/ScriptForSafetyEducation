@@ -545,7 +545,7 @@
   </action>
   <action name="bilibili_v3">
    <property name="text">
-    <string>v3-图形界面(2022.1.xx)</string>
+    <string>v3-图形界面(2022.1.13)</string>
    </property>
   </action>
   <action name="actionGithub">
