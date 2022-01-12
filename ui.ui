@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>450</height>
+    <height>504</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,9 +17,7 @@
    </size>
   </property>
   <property name="font">
-   <font>
-    <family>MiSans</family>
-   </font>
+   <font/>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -49,7 +47,6 @@
       </property>
       <property name="font">
        <font>
-        <family>MiSans</family>
         <pointsize>24</pointsize>
        </font>
       </property>
@@ -80,29 +77,57 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="TARGET_URL">
-        <property name="minimumSize">
-         <size>
-          <width>115</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="acceptDrops">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>http://weiban.mycourse.cn/#/course?projectType=normal</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <property name="dragEnabled">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>网址格式：http://weiban.mycourse.cn/#/course?projectType=...</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QComboBox" name="projectType">
+          <item>
+           <property name="text">
+            <string>通用安全教育</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>新生安全教育</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>专题安全教育</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>其他(请在右侧框内填写)</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="TARGET_URL">
+          <property name="minimumSize">
+           <size>
+            <width>115</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="acceptDrops">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>http://weiban.mycourse.cn/#/course?projectType=normal</string>
+          </property>
+          <property name="frame">
+           <bool>true</bool>
+          </property>
+          <property name="dragEnabled">
+           <bool>true</bool>
+          </property>
+          <property name="placeholderText">
+           <string>网址格式：http://weiban.mycourse.cn/#/course?projectType=...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
@@ -180,14 +205,14 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="label_15">
         <property name="text">
-         <string>进度：</string>
+         <string>等待进度：</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QProgressBar" name="progressBar">
+       <widget class="QProgressBar" name="waitProgressBar">
         <property name="value">
          <number>0</number>
         </property>
@@ -206,14 +231,14 @@
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>总进度：</string>
+         <string>模块进度：</string>
         </property>
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QProgressBar" name="totalProgressBar">
+       <widget class="QProgressBar" name="progressBar">
         <property name="value">
          <number>0</number>
         </property>
@@ -232,13 +257,39 @@
        </widget>
       </item>
       <item row="5" column="0">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>总进度：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QProgressBar" name="totalProgressBar">
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="textVisible">
+         <bool>true</bool>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="textDirection">
+         <enum>QProgressBar::TopToBottom</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
        <widget class="QLabel" name="label_12">
         <property name="text">
          <string>关于浏览器驱动：</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
+      <item row="6" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QLabel" name="label_10">
@@ -251,7 +302,6 @@
          <widget class="QLineEdit" name="lineEdit_2">
           <property name="font">
            <font>
-            <family>MiSans</family>
             <pointsize>8</pointsize>
            </font>
           </property>
@@ -265,17 +315,20 @@
         </item>
        </layout>
       </item>
-      <item row="6" column="0">
+      <item row="7" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>选择浏览器：</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
+      <item row="7" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QComboBox" name="BROWSER">
+          <property name="font">
+           <font/>
+          </property>
           <item>
            <property name="text">
             <string>Edge</string>
@@ -329,26 +382,31 @@
         </item>
        </layout>
       </item>
-      <item row="7" column="0">
+      <item row="8" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>加载浏览器驱动：</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
+      <item row="8" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
         <item>
          <widget class="QPushButton" name="findLocalDriver">
+          <property name="font">
+           <font>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>查找文件</string>
+           <string>选择驱动文件</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="driverPath">
           <property name="text">
-           <string/>
+           <string>当前未选择驱动文件</string>
           </property>
          </widget>
         </item>
@@ -380,6 +438,11 @@
       </item>
       <item>
        <widget class="QPushButton" name="checkLog">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>查看日志</string>
         </property>
@@ -387,6 +450,11 @@
       </item>
       <item>
        <widget class="QPushButton" name="testDriver">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>测试驱动</string>
         </property>
@@ -396,7 +464,7 @@
        <widget class="QPushButton" name="start">
         <property name="font">
          <font>
-          <family>MiSans</family>
+          <pointsize>12</pointsize>
           <bold>true</bold>
          </font>
         </property>
@@ -419,6 +487,16 @@
        </spacer>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
     </item>
     <item>
      <spacer name="verticalSpacer_2">
