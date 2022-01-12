@@ -132,3 +132,4 @@ static/
 *.txt
 *.ico
 *.exe
+test*
