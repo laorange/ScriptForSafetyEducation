@@ -1,27 +1,60 @@
 # ScriptForSafetyEducation
 
-> 用python全自动刷课——(北京麦课)安全教育
+> 用python全自动刷课——(北京麦课)安全课程-安全教育学习
 
-LICENCE：GPL-3.0
+LICENCE：`GPL-3.0`
 
-| 平台    | 地址                                                 |
-| ------- | ---------------------------------------------------- |
-| B站视频 | https://www.bilibili.com/video/BV1TL411c7mt/         |
-| GitHub  | https://github.com/laorange/ScriptForSafetyEducation |
-| Gitee   | https://gitee.com/laorange/ScriptForSafetyEducation  |
+| 平台   | 地址                                                 |
+| ------ | ---------------------------------------------------- |
+| GitHub | https://github.com/laorange/ScriptForSafetyEducation |
+| Gitee  | https://gitee.com/laorange/ScriptForSafetyEducation  |
 
-----
+| B站视频                                                      |
+| ------------------------------------------------------------ |
+| ▶ [用python全自动刷课_新生安全教育丨v1.0](https://www.bilibili.com/video/BV1UL411t7CR) |
+| ▶ [基于selenium的全自动python刷网课程序丨安全课程丨 selenium介绍丨v2.0](https://www.bilibili.com/video/BV1TL411c7mt) |
+| ▶ [基于pyside6的图形界面(GUI)的全自动python刷网课程序丨安全课程丨简单易用丨 v3.0](https://www.bilibili.com/video/BV1Bu411278n) |
 
-第三方库: ``selenium`` & ``loguru``
+## 截图
 
-本程序的目标网址：[https://weiban.mycourse.cn/index.html#/course?projectType=normal](https://weiban.mycourse.cn/index.html#/course?projectType=normal)
+![demo.png](static/demo.png)
+
+## 第三方库
+
+```python
+# pip install -r requirements.txt
+PySide6>=6.2.2
+loguru>=0.5.3
+selenium>=4.1.0
+```
+
+## 支持刷以下课程：
+
+### · 新生安全教育 
+
++ `http://weiban.mycourse.cn/#/course?projectType=pre` 
+
+  ![pre.png](static/pre.png)
+
+### · 安全课程学习 
+
++ `http://weiban.mycourse.cn/#/course?projectType=normal` 
+
+  ![normal.png](static/normal.png)
+  
+### · 专题学习 
+
++ `http://weiban.mycourse.cn/#/course?projectType=special` 
+
+  ![special.png](static/special.png)
 
 ## ⚠请注意⚠
 
-该学习的课程请自行学习。
+1. 该学习的课程请自行学习。
 
-写本程序是因为我想学selenium，并做一个项目练手。
+2. 写本程序是因为我想学`selenium`，并做一个项目练手。
 
-开源仅用于学习交流，严禁商用！
+3. 开源仅用于学习交流，严禁商用！
+4. 如果不着急，每节课的间隔时长可以设置在1分钟以上，尽量与正常看课时间接近，这样会非常安全。
 
-如因本程序所导致的任何后果自负哟~
+4. 使用该程序导致的任何后果请由使用者自行承担。
