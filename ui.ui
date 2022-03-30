@@ -483,11 +483,12 @@
     </property>
     <widget class="QMenu" name="menu_B">
      <property name="title">
-      <string>本程序在B站的视频</string>
+      <string>本程序相关B站视频</string>
      </property>
      <addaction name="bilibili_v1"/>
      <addaction name="bilibili_v2"/>
      <addaction name="bilibili_v3"/>
+     <addaction name="bilibili_v4"/>
     </widget>
     <addaction name="how2GetVersionOfBrowser"/>
     <addaction name="whyNeedDriver"/>
@@ -535,17 +536,17 @@
   </action>
   <action name="bilibili_v1">
    <property name="text">
-    <string>v1-新生安全教育(2021.8.19)</string>
+    <string>1.新生安全教育(2021.8.19)</string>
    </property>
   </action>
   <action name="bilibili_v2">
    <property name="text">
-    <string>v2-安全教育(2022.1.10)</string>
+    <string>2.安全教育(2022.1.10)</string>
    </property>
   </action>
   <action name="bilibili_v3">
    <property name="text">
-    <string>v3-图形界面(2022.1.13)</string>
+    <string>3.图形界面(2022.2.1)</string>
    </property>
   </action>
   <action name="actionGithub">
@@ -576,6 +577,11 @@
   <action name="how2GetVersionOfBrowser">
    <property name="text">
     <string>怎么查看浏览器版本号</string>
+   </property>
+  </action>
+  <action name="bilibili_v4">
+   <property name="text">
+    <string>4.信号与槽(2022.3.24)</string>
    </property>
   </action>
  </widget>

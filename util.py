@@ -35,7 +35,8 @@ my_signal = MySignal()
 
 def sleep(secs: int, info: str = ""):
     secs = int(secs)
-    logger.debug(f"{f'[{info}]-' if info else ''}等待{secs}秒")
+    if info:
+        logger.debug(f"{f'[{info}]-' if info else ''}等待{secs}秒")
     x = 1
     for t, _ in enumerate(range(x * secs)):
         if MyWebDriver.stop_flag:
@@ -60,9 +61,12 @@ class MyWebDriver:
         MyWebDriver.finished_course_num += 1
         self.refresh_progress_bar()
 
-    @staticmethod
-    def refresh_progress_bar():
-        my_signal.set_progress_bar.emit(int(MyWebDriver.finished_course_num / MyWebDriver.total_course_num * 100))
+    def refresh_progress_bar(self):
+        if MyWebDriver.total_course_num == 0:
+            logger.error("没有检测到有效的课程")
+            logger.error(f"当前url:{self.getDriver().current_url}")
+        else:
+            my_signal.set_progress_bar.emit(int(MyWebDriver.finished_course_num / MyWebDriver.total_course_num * 100))
 
     def __init__(self, driver, driver_path=""):
         try:
@@ -119,7 +123,6 @@ class MyWebDriver:
         return filtered_chapters_list
 
 
-@logger.catch
 class Handler:
     def __init__(self, target_url: str, driver, driver_path: "",
                  interval_between_two_lesson: int = 10, max_bias: int = 10):
@@ -130,6 +133,7 @@ class Handler:
         self.web = MyWebDriver(driver, driver_path)
         self.if_login = False
 
+    @logger.catch
     def start(self):
         self.web.get(self.target_url)
         self.ensure_login()
@@ -143,7 +147,7 @@ class Handler:
 
     def ensure_login(self):
         while not self.if_login:
-            sleep(5, "等待您手动在浏览器上登录账号")
+            sleep(5)
             self.update_login_status()
 
     def chapter_list_page_func(self):
@@ -218,8 +222,8 @@ if __name__ == '__main__':
         handler.minimize_window()
         sleep(30)
     except Exception as e:
-        print(f"{e}\n\n出错了，详情请查看运行日志")
-        input("敲击回车 来终止程序:")
+        logger.error(traceback.format_exc())
+        raise Exception
     finally:
         if hasattr(handler, "web") and hasattr(handler.web, "driver"):
             handler.web.driver.close()

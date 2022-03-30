@@ -1,5 +1,5 @@
 __Author__ = "bilibili@辣橙yzc"
-__version__ = "v3.0.0"
+__version__ = "v2022.03.30"
 
 import os
 import sys
@@ -47,7 +47,8 @@ class MainWindow(QMainWindow):
             lambda _: os.startfile("https://www.selenium.dev/zh-cn/documentation/webdriver/getting_started/install_drivers/"))
         self.ui.bilibili_v1.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1UL411t7CR"))
         self.ui.bilibili_v2.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1TL411c7mt"))
-        self.ui.bilibili_v3.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1Bu411278n"))
+        self.ui.bilibili_v3.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV1Wa41127fk"))
+        self.ui.bilibili_v4.triggered.connect(lambda _: os.startfile("https://www.bilibili.com/video/BV18F411W7y2"))
         self.ui.github.triggered.connect(lambda _: os.startfile("https://github.com/laorange/ScriptForSafetyEducation"))
         self.ui.gitee.triggered.connect(lambda _: os.startfile("https://gitee.com/laorange/ScriptForSafetyEducation"))
         self.ui.how2GetVersionOfBrowser.triggered.connect(lambda _: os.startfile("https://jingyan.baidu.com/article/0964eca222def8c384f5361e.html"))
@@ -113,7 +114,8 @@ class MainWindow(QMainWindow):
                 web.driver.close()
                 QMessageBox.about(self, "成功", f"您的驱动已完成配置，可以开始使用了！")
         except Exception as e:
-            QMessageBox.warning(self, "很抱歉", f"{e}")
+            logger.error(traceback.format_exc())
+            QMessageBox.warning(self, "很抱歉", f"该驱动不可用。您可以在'开发'-'运行日志'中的最后一段描述找到详细原因")
 
     def enable_start_button_function(self):
         self.ui.start.setEnabled(True)
@@ -134,6 +136,7 @@ class MainWindow(QMainWindow):
         self.ui.TARGET_URL.setText(PROJECT_TYPE_CHOICE[self.ui.projectType.currentIndex()])
 
     def startFunc(self):
+        @logger.catch
         def task_func():
             handler = None
             try:
@@ -142,17 +145,19 @@ class MainWindow(QMainWindow):
                 handler.start()
             except KeyboardInterrupt:
                 logger.info("结束！")
-            except selenium.common.exceptions.WebDriverException:
+            except selenium.common.exceptions.WebDriverException as e:
                 logger.error(traceback.format_exc())
+                QMessageBox.warning(self, "出错了", "出错了，详情可在“开发”中选择“查看日志”")
             except Exception:
                 logger.error(traceback.format_exc())
+                QMessageBox.warning(self, "出错了", "出错了，详情可在“开发”中选择“查看日志”")
             finally:
                 if hasattr(handler, "web") and hasattr(handler.web, "driver"):
                     handler.web.driver.close()
             self.ui.start.setEnabled(True)
-            my_signal.set_progress_bar(0)
-            my_signal.set_total_progress_bar(0)
-            my_signal.set_wait_progress_bar(0)
+            my_signal.set_progress_bar.emit(0)
+            my_signal.set_total_progress_bar.emit(0)
+            my_signal.set_wait_progress_bar.emit(0)
 
         choice = QMessageBox.question(self, "使用须知",
                                       "1.该程序仅用于学习交流，请勿商用\n"
