@@ -11,9 +11,10 @@ LICENCE：`GPL-3.0`
 
 | B站视频                                                      |
 | ------------------------------------------------------------ |
-| ▶ [用python全自动刷课_新生安全教育丨v1.0](https://www.bilibili.com/video/BV1UL411t7CR) |
-| ▶ [基于selenium的全自动python刷网课程序丨安全课程丨 selenium介绍丨v2.0](https://www.bilibili.com/video/BV1TL411c7mt) |
-| ▶ [基于pyside6的图形界面(GUI)的全自动python刷网课程序丨安全课程丨简单易用丨 v3.0](https://www.bilibili.com/video/BV1Bu411278n) |
+| ▶ [第一期：用python全自动刷课_新生安全教育丨v1.0](https://www.bilibili.com/video/BV1UL411t7CR) |
+| ▶ [第二期：基于selenium的全自动python刷网课程序丨安全课程丨 selenium介绍丨v2.0](https://www.bilibili.com/video/BV1TL411c7mt) |
+| ▶ [第三期：python图形界面 PyQt/PySide6 QtDesigner的使用](https://www.bilibili.com/video/BV1Wa41127fk) |
+| ▶ [第四期：Python图形界面 15分钟快速入门PySide/PyQt 信号与槽](https://www.bilibili.com/video/BV18F411W7y2) |
 
 ## 截图
 
